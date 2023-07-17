@@ -6,8 +6,10 @@ import (
 	"strings"
 )
 
-var alphabet string = "abcdefghijklmnopqrstuvwxyz"
-var captialAlphabet string = strings.ToUpper(alphabet)
+var (
+	alphabet        string = "abcdefghijklmnopqrstuvwxyz"
+	captialAlphabet string = strings.ToUpper(alphabet)
+)
 
 func rot(char byte) byte {
 	charArray := &alphabet
@@ -36,7 +38,6 @@ type rot13Reader struct {
 
 func (r *rot13Reader) Read(buffer []byte) (int, error) {
 	n, err := r.r.Read(buffer)
-
 	if err != nil {
 		return n, err
 	}
@@ -49,8 +50,12 @@ func (r *rot13Reader) Read(buffer []byte) (int, error) {
 }
 
 func main() {
-	s := strings.NewReader("Lbh penpxrq gur pbqr!\n")
+	inputString := ""
+	if len(os.Args) > 1 {
+		inputString = os.Args[1]
+	}
+
+	s := strings.NewReader(inputString + "\n")
 	r := rot13Reader{s}
 	io.Copy(os.Stdout, &r)
 }
-
