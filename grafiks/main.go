@@ -2,14 +2,10 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"golang.org/x/term"
 )
-
-type point struct {
-	X int
-	Y int
-}
 
 func toString(r []rune) string {
 	str := ""
@@ -26,7 +22,7 @@ func drawAlternatingPoints(d *display) {
 	for X := 0; X < d.width; X += 1 {
 		for Y := 0; Y < d.height; Y += 1 {
 			fmt.Println(X, Y)
-			p := point{X, Y}
+			p := Point{X, Y}
 			d.drawPoint(&p, 255)
 		}
 	}
@@ -41,6 +37,25 @@ func main() {
 	fmt.Printf("The terminal is of size: %v, %v\n", width, height)
 
 	myDisplay := makeDisplay(width, height)
-	drawAlternatingPoints(&myDisplay)
+	// drawAlternatingPoints(&myDisplay)
 	myDisplay.render()
+
+	sim := makeSim()
+
+	for {
+		time.Sleep(time.Second / 5)
+		sim.step(0.5)
+
+		myDisplay.clear()
+
+		for _, particle := range sim.particles {
+			//	println(particle.position.X, particle.position.Y)
+			myDisplay.drawPoint(
+				&Point{X: int(particle.position.X), Y: int(particle.position.Y)},
+				255,
+			)
+		}
+
+		myDisplay.render()
+	}
 }

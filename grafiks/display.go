@@ -14,13 +14,29 @@ func makeDisplay(width, height int) display {
 		buffer = append(buffer, make([]rune, width))
 	}
 
-	println(len(buffer))
-	println(len(buffer[0]))
 	return display{buffer, width, height}
 }
 
-func (d *display) drawPoint(p *point, a int) {
-	d.buffer[p.Y][p.X] = '#'
+func (d *display) drawPoint(p *Point, a int) {
+	if p.X >= d.width || p.X < 0 || p.Y >= d.height || p.Y < 0 {
+		return
+	}
+
+	char := ' '
+	if a > 200 {
+		char = '#'
+	}
+
+	d.buffer[p.Y][p.X] = char
+}
+
+func (d *display) clear() {
+	fmt.Print("\033[H\033[2J")
+	for Y := 0; Y < d.height; Y++ {
+		for X := 0; X < d.width; X++ {
+			d.drawPoint(&Point{X, Y}, 0)
+		}
+	}
 }
 
 func (d *display) render() {
