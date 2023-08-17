@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+
+	"golang.org/x/term"
 )
 
-const (
-	WIDTH  int = 11
-	HEIGHT int = 11
+var (
+	WIDTH  int
+	HEIGHT int
 )
 
 type point struct {
@@ -15,7 +17,16 @@ type point struct {
 }
 
 type display struct {
-	Buffer [HEIGHT][WIDTH]rune
+	Buffer [][]rune
+}
+
+func makeDisplay(width, height int) display {
+	var buffer [][]rune
+	for i := 0; i < height; i++ {
+		buffer = append(buffer, make([]rune, height))
+	}
+
+	return display{Buffer: buffer}
 }
 
 func coordToIndex(p *point) int {
@@ -32,7 +43,7 @@ func (d *display) drawPoint(p *point, a int) {
 	d.Buffer[p.Y][p.X] = '#'
 }
 
-func toString(r [WIDTH]rune) string {
+func toString(r []rune) string {
 	str := ""
 	for _, s := range r {
 		if s == 0 {
@@ -57,8 +68,11 @@ func drawAlternatingPoints(d *display) {
 }
 
 func main() {
-	fmt.Println("Hello chloe")
-	myDisplay := display{}
+	width, height, err := term.GetSize(0)
+	fmt.Printf("The terminal is of size: %v, %v ", width, height, err)
+	myDisplay := makeDisplay(width, height)
+	HEIGHT = height
+	WIDTH = width
 
 	drawAlternatingPoints(&myDisplay)
 	myDisplay.render()
