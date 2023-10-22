@@ -28,6 +28,20 @@ func getDisplay() display {
 	return makeDisplay(width, height)
 }
 
+func renderImage() {
+	display := getDisplay()
+	buffer := getImageBuffer("assets/cat.jpg", display.width, display.height)
+
+	for X := 0; X < display.width; X += 1 {
+		for Y := 0; Y < display.height; Y += 1 {
+			p := Point{X, Y}
+			display.drawPoint(&p, int(buffer[X+Y*display.width]))
+		}
+	}
+
+	display.render()
+}
+
 func alternatingPoints() {
 	myDisplay := getDisplay()
 	for X := 0; X < myDisplay.width; X += 2 {
