@@ -1,7 +1,17 @@
 package main
 
 func main() {
-	// bouncingPoint()
-	// alternatingPoints()
-	renderImage()
+	options := getOptions()
+
+	if *options.mode == "sim" {
+		bouncingPoint()
+		return
+	}
+
+	if *options.mode == "image" {
+		renderImage(*options.sourceImagePath)
+		return
+	}
+
+	alternatingPoints()
 }

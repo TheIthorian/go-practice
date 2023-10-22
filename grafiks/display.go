@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+	"strings"
+)
 
 type display struct {
 	buffer [][]rune
@@ -17,17 +21,23 @@ func makeDisplay(width, height int) display {
 	return display{buffer, width, height}
 }
 
+var (
+	levels  []string = []string{" ", "░", "▒", "▓", "█"}
+	levels_ []string = strings.Split(
+		"$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft()1{}[]?-_+~<>i!lI;:,^`'.",
+		"",
+	)
+)
+
 func (d *display) drawPoint(p *Point, alpha int) {
 	if p.X >= d.width || p.X < 0 || p.Y >= d.height || p.Y < 0 {
 		return
 	}
 
-	char := ' '
-	if alpha > 200 {
-		char = '#'
-	}
-
-	d.buffer[p.Y][p.X] = char
+	charIndex := alpha * len(levels) / 255
+	intCharIndex := math.Min(float64(charIndex), float64(len(levels)-1))
+	char := levels[int(intCharIndex)]
+	d.buffer[p.Y][p.X] = rune(char[0])
 }
 
 func (d *display) clear() {

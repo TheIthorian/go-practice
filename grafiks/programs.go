@@ -28,9 +28,9 @@ func getDisplay() display {
 	return makeDisplay(width, height)
 }
 
-func renderImage() {
+func renderImage(sourceImagePath string) {
 	display := getDisplay()
-	buffer := getImageBuffer("assets/cat.jpg", display.width, display.height)
+	buffer := getImageBuffer(sourceImagePath, display.width, display.height)
 
 	for X := 0; X < display.width; X += 1 {
 		for Y := 0; Y < display.height; Y += 1 {
