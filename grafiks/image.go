@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"image"
+	"image/color"
 	_ "image/jpeg"
 	"log"
 	"os"
@@ -38,13 +39,8 @@ func getImageBuffer(filePath string, width int, height int) []uint8 {
 	fmt.Println("Resized image to", bounds.Max.X, bounds.Max.Y)
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			r, g, b, _ := resizedImage.At(x, y).RGBA()
-			// A color's RGBA method returns values in the range [0, 65535].
-			// Shifting by 8 reduces this to the range [0, 255].
-			grayscaleFactor := uint(0.3*float32(r) + 0.6*float32(g) + 0.1*float32(b))
-			fmt.Println(grayscaleFactor >> 8)
-
-			buffer[x+y*width] = uint8(grayscaleFactor >> 8)
+			color := color.GrayModel.Convert(resizedImage.At(x, y)).(color.Gray)
+			buffer[x+y*width] = color.Y
 		}
 	}
 
