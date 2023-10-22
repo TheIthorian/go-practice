@@ -17,13 +17,13 @@ func makeDisplay(width, height int) display {
 	return display{buffer, width, height}
 }
 
-func (d *display) drawPoint(p *Point, a int) {
+func (d *display) drawPoint(p *Point, alpha int) {
 	if p.X >= d.width || p.X < 0 || p.Y >= d.height || p.Y < 0 {
 		return
 	}
 
 	char := ' '
-	if a > 200 {
+	if alpha > 200 {
 		char = '#'
 	}
 
