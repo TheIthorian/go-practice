@@ -15,3 +15,7 @@ go build -o build/grafiks .
 go run .
 ```
 
+### Functionality
+
+Displays an image in the terminal
+
