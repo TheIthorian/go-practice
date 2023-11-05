@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"golang.org/x/term"
@@ -19,7 +20,8 @@ func toString(r []rune) string {
 }
 
 func getDisplay() display {
-	width, height, err := term.GetSize(0)
+	fd := int(os.Stdout.Fd())
+	width, height, err := term.GetSize(fd)
 	if err != nil {
 		fmt.Println("Unable to load terminal")
 		return makeDisplay(0, 0)
