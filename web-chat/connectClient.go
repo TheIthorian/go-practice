@@ -37,7 +37,7 @@ func connect(hostUrl string, username string) {
 				log.Println("read:", err)
 				return
 			}
-			fmt.Printf("recv: %s\n%s", message, username+" > ")
+			fmt.Printf("\r%s%s\n%s", username+": ", message, username+" > ")
 		}
 	}()
 
@@ -59,6 +59,7 @@ func connect(hostUrl string, username string) {
 		case <-ticker.C:
 			fmt.Print(username + " > ")
 			message, _ := reader.ReadString('\n')
+			fmt.Print("\r")
 			err := c.WriteMessage(websocket.TextMessage, []byte(message))
 			if err != nil {
 				log.Println("write:", err)
